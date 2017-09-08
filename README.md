@@ -3,9 +3,10 @@
 > This is an implementatin of Martin Fowler's [Recurring Events
 for Calendars](https://martinfowler.com/apsupp/recurring.pdf)
 
-``` go
 
 ## Example:
+
+``` go
 
 import (
 	"time"
