@@ -1,6 +1,6 @@
 # Recurring
 
-> This is an implementatin of Martin Fowler's [Recurring Events
+> This is an Implementation of Martin Fowler's [Recurring Events
 for Calendars](https://martinfowler.com/apsupp/recurring.pdf)
 
 
