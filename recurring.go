@@ -64,21 +64,21 @@ func Days(days ...int) TemporalExpression {
 // DayRange returns a temporal expression that matches all
 // days between the start and end days
 func DayRange(start, end int) DayRangeExpression {
-	return DayRangeExpression{start, end}
+	return DayRangeExpression{Day(start), Day(end)}
 }
 
 // DayRange is a temporal expression that matches all
 // days between the Start and End values
 type DayRangeExpression struct {
-	Start int
-	End   int
+	Start Day
+	End   Day
 }
 
 // Includes returns true when the provided time's day falls
 // between the range's Start and Stop values
 func (dr DayRangeExpression) Includes(t time.Time) bool {
 	d := t.Day()
-	return Day(dr.Start).normalize(t) <= d && d <= Day(dr.End).normalize(t)
+	return dr.Start.normalize(t) <= d && d <= dr.End.normalize(t)
 }
 
 // Week is a temporal expression that matches a week in a month starting at 1
@@ -233,21 +233,21 @@ func Years(years ...int) TemporalExpression {
 // YearRange returns a temporal expression that matches all
 // years between the start and end values
 func YearRange(start, end int) YearRangeExpression {
-	return YearRangeExpression{start, end}
+	return YearRangeExpression{Year(start), Year(end)}
 }
 
 // YearRangeExpression is a temporal expression that matches all
 // years between the Start and End values
 type YearRangeExpression struct {
-	Start int
-	End   int
+	Start Year
+	End   Year
 }
 
 // Includes returns true when the provided time's years falls
 // between the range's Start and Stop values
 func (yr YearRangeExpression) Includes(t time.Time) bool {
 	year := t.Year()
-	return yr.Start <= year && year <= yr.End
+	return int(yr.Start) <= year && year <= int(yr.End)
 }
 
 // Date is temporal function that matches the year, month, and day
