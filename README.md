@@ -20,7 +20,7 @@ func main() {
 	
 	newyears := recurring.And(
 		recurring.January,
-		recurring.Day(1)
+		recurring.Day(1),
 	)
 
 	halloween := recurring.And(
