@@ -6,7 +6,7 @@ import (
 	"github.com/icholy/recurring/timeutil"
 )
 
-// Find the next occurence of the temporal expression starting at t
+// Next finds the next occurence of the temporal expression starting at t
 func Next(t time.Time, te TemporalExpression) time.Time {
 	day := 24 * time.Hour
 	t = timeutil.BeginningOfDay(t)
@@ -16,7 +16,7 @@ func Next(t time.Time, te TemporalExpression) time.Time {
 	return t
 }
 
-// FindN finds the next n occurences of the temportal expression starting at t
+// NextN finds the next n occurences of the temportal expression starting at t
 func NextN(t time.Time, te TemporalExpression, n int) []time.Time {
 	ts := make([]time.Time, n)
 	for i := 0; i < n; i++ {

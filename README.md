@@ -38,7 +38,7 @@ func main() {
 		recurring.Not(holidays),
 	)
 
-	for _, t := range recurring.FindNextN(t, expr, 10) {
+	for _, t := range recurring.NextN(t, expr, 10) {
 		fmt.Println(t)
 	}
 
