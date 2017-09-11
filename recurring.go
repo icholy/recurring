@@ -8,23 +8,22 @@ import (
 
 // Next finds the next occurence of the temporal expression starting at t
 func Next(t time.Time, te TemporalExpression) time.Time {
-	day := 24 * time.Hour
 	t = timeutil.BeginningOfDay(t)
 	for !te.Includes(t) {
-		t = t.Add(day)
+		t = t.Add(24 * time.Hour)
 	}
 	return t
 }
 
 // NextN finds the next n occurences of the temportal expression starting at t
 func NextN(t time.Time, te TemporalExpression, n int) []time.Time {
-	ts := make([]time.Time, n)
+	tt := make([]time.Time, n)
 	for i := 0; i < n; i++ {
 		t = Next(t, te)
-		ts[i] = t
+		tt[i] = t
 		t = t.Add(24 * time.Hour)
 	}
-	return ts
+	return tt
 }
 
 // TemporalExpression matches a subset of time values
@@ -54,11 +53,11 @@ func (d Day) Includes(t time.Time) bool {
 // Days is a helper function that combines multiple Day temporal
 // expressions with a logical OR operation
 func Days(days ...int) TemporalExpression {
-	expressions := make([]TemporalExpression, len(days))
+	ee := make([]TemporalExpression, len(days))
 	for i, d := range days {
-		expressions[i] = Day(d)
+		ee[i] = Day(d)
 	}
-	return Or(expressions...)
+	return Or(ee...)
 }
 
 // DayRange returns a temporal expression that matches all
@@ -101,11 +100,11 @@ func (w Week) Includes(t time.Time) bool {
 // Weeks is a helper function that combines multiple Week temporal
 // expressions with a logical OR operation
 func Weeks(weeks ...int) TemporalExpression {
-	expressions := make([]TemporalExpression, len(weeks))
+	ee := make([]TemporalExpression, len(weeks))
 	for i, w := range weeks {
-		expressions[i] = Week(w)
+		ee[i] = Week(w)
 	}
-	return Or(expressions...)
+	return Or(ee...)
 }
 
 // Weekday is a temporal expression that matches a day of the week
@@ -130,11 +129,11 @@ func (wd Weekday) Includes(t time.Time) bool {
 // Weekdays is a helper function that combines multiple Weekday
 // temporal expressions using a local OR operation
 func Weekdays(weekdays ...time.Weekday) TemporalExpression {
-	expressions := make([]TemporalExpression, len(weekdays))
+	ee := make([]TemporalExpression, len(weekdays))
 	for i, wd := range weekdays {
-		expressions[i] = Weekday(wd)
+		ee[i] = Weekday(wd)
 	}
-	return Or(expressions...)
+	return Or(ee...)
 }
 
 // WeekdayRange returns a temporal expression that matches all
@@ -184,11 +183,11 @@ func (m Month) Includes(t time.Time) bool {
 // Months is a helper function that combines multiple Month temporal
 // expressions using a local OR operation
 func Months(months ...time.Month) TemporalExpression {
-	expressions := make([]TemporalExpression, len(months))
+	ee := make([]TemporalExpression, len(months))
 	for i, m := range months {
-		expressions[i] = Month(m)
+		ee[i] = Month(m)
 	}
-	return Or(expressions...)
+	return Or(ee...)
 }
 
 // MonthRange returns a temporal expression that matches all
@@ -223,11 +222,11 @@ func (y Year) Includes(t time.Time) bool {
 // Years is a helper function that combines multipe Year
 // temporal expressions using a local OR operation
 func Years(years ...int) TemporalExpression {
-	expressions := make([]TemporalExpression, len(years))
+	ee := make([]TemporalExpression, len(years))
 	for i, y := range years {
-		expressions[i] = Year(y)
+		ee[i] = Year(y)
 	}
-	return Or(expressions...)
+	return Or(ee...)
 }
 
 // YearRange returns a temporal expression that matches all
@@ -264,35 +263,35 @@ func (d Date) Includes(t time.Time) bool {
 // Dates is a helper function that combines multiple Date temporal
 // expressions using a logical OR operation
 func Dates(dates ...time.Time) TemporalExpression {
-	expressions := make([]TemporalExpression, len(dates))
+	ee := make([]TemporalExpression, len(dates))
 	for i, d := range dates {
-		expressions[i] = Date(d)
+		ee[i] = Date(d)
 	}
-	return Or(expressions...)
+	return Or(ee...)
 }
 
 // Or combines multiple temporal expressions into one using
 // a local Or operation
-func Or(expressions ...TemporalExpression) OrExpression {
-	return OrExpression{expressions}
+func Or(ee ...TemporalExpression) OrExpression {
+	return OrExpression{ee}
 }
 
 // OrExpression is a temporal expression consisting of multiple
 // temporal expressions combined using a logical OR operation
 type OrExpression struct {
-	expressions []TemporalExpression
+	ee []TemporalExpression
 }
 
 // Or adds a temporal expression
-func (oe *OrExpression) Or(te TemporalExpression) {
-	oe.expressions = append(oe.expressions, te)
+func (oe *OrExpression) Or(e TemporalExpression) {
+	oe.ee = append(oe.ee, e)
 }
 
 // Includes returns true when any of the underlying expressions
 // match the provided time
 func (oe OrExpression) Includes(t time.Time) bool {
-	for _, te := range oe.expressions {
-		if te.Includes(t) {
+	for _, e := range oe.ee {
+		if e.Includes(t) {
 			return true
 		}
 	}
@@ -301,26 +300,26 @@ func (oe OrExpression) Includes(t time.Time) bool {
 
 // And combines multiple temporal expressions into one using
 // a local AND operation
-func And(expressions ...TemporalExpression) AndExpression {
-	return AndExpression{expressions}
+func And(ee ...TemporalExpression) AndExpression {
+	return AndExpression{ee}
 }
 
 // AndExpression is a temporal expressions consisting of mutliple
 // temporal expressions combined with a local AND operation
 type AndExpression struct {
-	expressions []TemporalExpression
+	ee []TemporalExpression
 }
 
 // And adds a temporal expression
-func (ae *AndExpression) And(te TemporalExpression) {
-	ae.expressions = append(ae.expressions, te)
+func (ae *AndExpression) And(e TemporalExpression) {
+	ae.ee = append(ae.ee, e)
 }
 
 // Includes return true when all the underlying temporal expressions
 // match the provided time
 func (ae AndExpression) Includes(t time.Time) bool {
-	for _, te := range ae.expressions {
-		if !te.Includes(t) {
+	for _, e := range ae.ee {
+		if !e.Includes(t) {
 			return false
 		}
 	}
@@ -328,18 +327,18 @@ func (ae AndExpression) Includes(t time.Time) bool {
 }
 
 // Not negates a temporal expression
-func Not(te TemporalExpression) NotExpression {
-	return NotExpression{te}
+func Not(e TemporalExpression) NotExpression {
+	return NotExpression{e}
 }
 
 // NotExpression is a temporal expression with negates
 // its underlying expression
 type NotExpression struct {
-	te TemporalExpression
+	e TemporalExpression
 }
 
 // Include returns true when the underlying temporal expression
 // does not match the provided time
 func (ne NotExpression) Includes(t time.Time) bool {
-	return !ne.te.Includes(t)
+	return !ne.e.Includes(t)
 }
