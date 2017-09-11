@@ -3,6 +3,8 @@
 > This is an Implementation of Martin Fowler's [Recurring Events
 for Calendars](https://martinfowler.com/apsupp/recurring.pdf)
 
+[![](https://img.shields.io/badge/godoc-reference-5272B4.svg)](https://godoc.org/github.com/icholy/recurring)
+
 
 ## Example:
 
