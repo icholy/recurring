@@ -40,7 +40,7 @@ func main() {
 		recurring.Not(holidays),
 	)
 
-	for _, t := range recurring.NextN(t, expr, 10) {
+	for _, t := range recurring.NextN(t, workdays, 10) {
 		fmt.Println(t)
 	}
 
