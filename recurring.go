@@ -174,6 +174,12 @@ func (wd Weekday) Includes(t time.Time) bool {
 // Next returns the first available time after t that matches the expression
 // if the resulting value is greater than max, return a zero time
 func (wd Weekday) Next(t, max time.Time) time.Time {
+	for t.Before(max) {
+		if wd.Includes(t) {
+			return t
+		}
+		t = timeutil.BeginningOfDay(t.AddDate(0, 0, 1))
+	}
 	return time.Time{}
 }
 
