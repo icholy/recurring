@@ -30,6 +30,23 @@ func TestIncludes(t *testing.T) {
 			match:   []string{"2018/10/31", "2018/11/30", "2018/02/28"},
 			nomatch: []string{"2018/10/30", "2018/11/28", "2018/02/13"},
 		},
+		{
+			name:    "DayRange",
+			expr:    DayRange(5, 7),
+			match:   []string{"2018/10/05", "2018/10/06", "2018/10/07"},
+			nomatch: []string{"2018/10/04", "2018/10/08"},
+		},
+		{
+			name:    "DayRange Same Day",
+			expr:    DayRange(1, 1),
+			match:   []string{"2018/10/01", "2018/12/01", "2020/01/01"},
+			nomatch: []string{"2018/10/07", "2018/12/10", "2020/01/18"},
+		},
+		{
+			name:  "DayRange Whole Month",
+			expr:  DayRange(0, -1),
+			match: []string{"2018/10/31", "2018/11/30", "2018/02/28"},
+		},
 	}
 
 	for _, tt := range tests {
