@@ -30,6 +30,12 @@ func TestNext(t *testing.T) {
 			input:    "2012/12/01",
 			expected: "2012/12/01",
 		},
+		{
+			name:     "Day/Before",
+			expr:     Day(1),
+			input:    "2012/12/02",
+			expected: "2013/01/01",
+		},
 	}
 
 	for _, tt := range tests {
