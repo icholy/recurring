@@ -62,7 +62,7 @@ func (d Day) Next(t, max time.Time) time.Time {
 			return t
 		}
 		if d.normalize(t) < t.Day() {
-			t = timeutil.BeginningOfMonth(t).AddDate(0, 1, 0)
+			t = timeutil.BeginningOfMonth(t.AddDate(0, 1, 0))
 		} else {
 			t = timeutil.BeginningOfMonth(t)
 		}
@@ -133,6 +133,12 @@ func (w Week) Includes(t time.Time) bool {
 // Next returns the first available time after t that matches the expression
 // if the resulting value is greater than max, return a zero time
 func (w Week) Next(t, max time.Time) time.Time {
+	for t.Before(max) {
+		if w.Includes(t) {
+			return t
+		}
+		t = timeutil.BeginningOfWeek(t.AddDate(0, 0, 7))
+	}
 	return time.Time{}
 }
 
