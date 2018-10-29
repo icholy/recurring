@@ -19,10 +19,16 @@ func TestNext(t *testing.T) {
 		expected string
 	}{
 		{
-			name:     "Day",
+			name:     "Day/Next",
 			expr:     Day(2),
 			input:    "2012/12/01",
 			expected: "2012/12/02",
+		},
+		{
+			name:     "Day/Same",
+			expr:     Day(1),
+			input:    "2012/12/01",
+			expected: "2012/12/01",
 		},
 	}
 
