@@ -90,16 +90,22 @@ func TestIncludes(t *testing.T) {
 			nomatch: []string{"2015/01/02", "2020/01/03", "2012/02/04"},
 		},
 		{
-			name:    "or",
+			name:    "Or",
 			expr:    Or(Year(2012), Day(1)),
 			match:   []string{"2012/01/02", "2012/01/12", "2019/02/01"},
 			nomatch: []string{"2015/01/02", "2020/01/03", "2013/02/04"},
 		},
 		{
-			name:    "and",
+			name:    "And",
 			expr:    And(Year(2012), Day(1)),
 			match:   []string{"2012/01/01", "2012/12/01", "2012/04/01"},
 			nomatch: []string{"2015/01/01", "2012/01/03", "2013/02/04"},
+		},
+		{
+			name:    "Not",
+			expr:    Not(MonthRange(time.January, time.February)),
+			match:   []string{"2018/11/02", "2018/12/03", "2018/03/04"},
+			nomatch: []string{"2018/01/02", "2018/01/03", "2018/02/04"},
 		},
 	}
 
