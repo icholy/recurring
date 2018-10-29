@@ -45,7 +45,7 @@ func (d Day) normalize(t time.Time) int {
 	return day
 }
 
-// Include returns true when provided time's day matches the expressions
+// Includes returns true when provided time's day matches the expressions
 func (d Day) Includes(t time.Time) bool {
 	return d.normalize(t) == t.Day()
 }
@@ -66,7 +66,7 @@ func DayRange(start, end int) DayRangeExpression {
 	return DayRangeExpression{Day(start), Day(end)}
 }
 
-// DayRange is a temporal expression that matches all
+// DayRangeExpression is a temporal expression that matches all
 // days between the Start and End values
 type DayRangeExpression struct {
 	Start Day
@@ -174,7 +174,7 @@ const (
 	December
 )
 
-// Include returns true when the provided time's date
+// Includes returns true when the provided time's date
 // matches the temporal expression's
 func (m Month) Includes(t time.Time) bool {
 	return t.Month() == time.Month(m)
@@ -213,7 +213,7 @@ func (mr MonthRangeExpression) Includes(t time.Time) bool {
 // Year is a temporal expression which matchese a year
 type Year int
 
-// Include returns true when the provided time's year
+// Includes returns true when the provided time's year
 // matches the temporal expression's
 func (y Year) Includes(t time.Time) bool {
 	return t.Year() == int(y)
@@ -337,7 +337,7 @@ type NotExpression struct {
 	e TemporalExpression
 }
 
-// Include returns true when the underlying temporal expression
+// Includes returns true when the underlying temporal expression
 // does not match the provided time
 func (ne NotExpression) Includes(t time.Time) bool {
 	return !ne.e.Includes(t)
