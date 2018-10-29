@@ -252,6 +252,12 @@ func (m Month) Includes(t time.Time) bool {
 // Next returns the first available time after t that matches the expression
 // if the resulting value is greater than max, return a zero time
 func (m Month) Next(t, max time.Time) time.Time {
+	for t.Before(max) {
+		if m.Includes(t) {
+			return t
+		}
+		t = timeutil.BeginningOfMonth(t.AddDate(0, 1, 0))
+	}
 	return time.Time{}
 }
 
