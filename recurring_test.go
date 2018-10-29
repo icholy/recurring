@@ -89,6 +89,12 @@ func TestIncludes(t *testing.T) {
 			match:   []string{"2016/01/02", "2017/01/03", "2019/02/04"},
 			nomatch: []string{"2015/01/02", "2020/01/03", "2012/02/04"},
 		},
+		{
+			name:    "or",
+			expr:    Or(Year(2012), Day(1)),
+			match:   []string{"2012/01/02", "2012/01/12", "2019/02/01"},
+			nomatch: []string{"2015/01/02", "2020/01/03", "2013/02/04"},
+		},
 	}
 
 	for _, tt := range tests {
