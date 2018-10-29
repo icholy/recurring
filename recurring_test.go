@@ -59,6 +59,12 @@ func TestIncludes(t *testing.T) {
 			match:   []string{"2018/10/02", "2018/10/16"},
 			nomatch: []string{"2018/10/01", "2018/10/18"},
 		},
+		{
+			name:    "WeekdayRange",
+			expr:    WeekdayRange(time.Tuesday, time.Thursday),
+			match:   []string{"2018/10/02", "2018/10/03", "2018/10/04"},
+			nomatch: []string{"2018/10/01", "2018/10/05"},
+		},
 	}
 
 	for _, tt := range tests {
