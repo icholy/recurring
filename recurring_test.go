@@ -71,6 +71,12 @@ func TestIncludes(t *testing.T) {
 			match:   []string{"2018/10/02", "2018/10/03", "2018/10/04"},
 			nomatch: []string{"2018/11/02", "2018/12/03", "2018/02/04"},
 		},
+		{
+			name:    "MonthRange",
+			expr:    MonthRange(time.January, time.February),
+			match:   []string{"2018/01/02", "2018/01/03", "2018/02/04"},
+			nomatch: []string{"2018/11/02", "2018/12/03", "2018/03/04"},
+		},
 	}
 
 	for _, tt := range tests {
