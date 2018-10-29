@@ -23,6 +23,7 @@ func TestNext(t *testing.T) {
 			input, err := time.Parse(layout, tt.input)
 			assert.NilError(t, err)
 			actual := tt.expr.Next(input, input.AddDate(1, 0, 0))
+			assert.Assert(t, !actual.IsZero())
 			assert.Equal(t, tt.expected, actual.Format(layout))
 		})
 	}
