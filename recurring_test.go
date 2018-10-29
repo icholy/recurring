@@ -19,7 +19,7 @@ func TestNext(t *testing.T) {
 		expected string
 	}{
 		{
-			name:     "Day/Next",
+			name:     "Day/After",
 			expr:     Day(2),
 			input:    "2012/12/01",
 			expected: "2012/12/02",
@@ -36,6 +36,18 @@ func TestNext(t *testing.T) {
 			input:    "2012/12/02",
 			expected: "2013/01/01",
 		},
+		{
+			name:     "Day/Rare",
+			expr:     Day(31),
+			input:    "2018/09/30",
+			expected: "2018/10/31",
+		},
+		{
+			name:     "Day/Negative",
+			expr:     Day(-2),
+			input:    "2018/09/30",
+			expected: "2018/10/30",
+		},
 	}
 
 	for _, tt := range tests {
@@ -44,7 +56,7 @@ func TestNext(t *testing.T) {
 			assert.NilError(t, err)
 			actual := tt.expr.Next(input, input.AddDate(1, 0, 0))
 			assert.Assert(t, !actual.IsZero())
-			assert.Equal(t, tt.expected, actual.Format(layout))
+			assert.Equal(t, actual.Format(layout), tt.expected)
 		})
 	}
 }

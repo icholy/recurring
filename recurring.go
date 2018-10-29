@@ -57,6 +57,17 @@ func (d Day) Includes(t time.Time) bool {
 // Next returns the first available time after t that matches the expression
 // if the resulting value is greater than max, return a zero time
 func (d Day) Next(t, max time.Time) time.Time {
+	for t.Before(max) {
+		if d.Includes(t) {
+			return t
+		}
+		if d.normalize(t) < t.Day() {
+			t = timeutil.BeginningOfMonth(t).AddDate(0, 1, 0)
+		} else {
+			t = timeutil.BeginningOfMonth(t)
+		}
+		t = t.AddDate(0, 0, d.normalize(t)-1)
+	}
 	return time.Time{}
 }
 
