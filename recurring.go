@@ -31,6 +31,10 @@ type TemporalExpression interface {
 
 	// Include returns true when the provided time matches the temporal expression
 	Includes(t time.Time) bool
+
+	// Next returns the first available time after t that matches the expression
+	// if the resulting value is greater than max, return a zero time
+	Next(t, max time.Time) time.Time
 }
 
 // Day is a temporal expression that matches a day of the month starting at 1
@@ -48,6 +52,12 @@ func (d Day) normalize(t time.Time) int {
 // Includes returns true when provided time's day matches the expressions
 func (d Day) Includes(t time.Time) bool {
 	return d.normalize(t) == t.Day()
+}
+
+// Next returns the first available time after t that matches the expression
+// if the resulting value is greater than max, return a zero time
+func (d Day) Next(t, max time.Time) time.Time {
+	return time.Time{}
 }
 
 // Days is a helper function that combines multiple Day temporal
@@ -80,6 +90,12 @@ func (dr DayRangeExpression) Includes(t time.Time) bool {
 	return dr.Start.normalize(t) <= d && d <= dr.End.normalize(t)
 }
 
+// Next returns the first available time after t that matches the expression
+// if the resulting value is greater than max, return a zero time
+func (dr DayRangeExpression) Next(t, max time.Time) time.Time {
+	return time.Time{}
+}
+
 // Week is a temporal expression that matches a week in a month starting at 1
 // negative numbers start at the end of the month and move backwards
 type Week int
@@ -95,6 +111,12 @@ func (w Week) normalize(t time.Time) int {
 // Includes returns true when the provided time's week matches the expression's
 func (w Week) Includes(t time.Time) bool {
 	return timeutil.WeekOfMonth(t) == w.normalize(t)
+}
+
+// Next returns the first available time after t that matches the expression
+// if the resulting value is greater than max, return a zero time
+func (w Week) Next(t, max time.Time) time.Time {
+	return time.Time{}
 }
 
 // Weeks is a helper function that combines multiple Week temporal
@@ -124,6 +146,12 @@ const (
 // matches the expression's
 func (wd Weekday) Includes(t time.Time) bool {
 	return t.Weekday() == time.Weekday(wd)
+}
+
+// Next returns the first available time after t that matches the expression
+// if the resulting value is greater than max, return a zero time
+func (wd Weekday) Next(t, max time.Time) time.Time {
+	return time.Time{}
 }
 
 // Weekdays is a helper function that combines multiple Weekday
@@ -156,6 +184,12 @@ func (wr WeekdayRangeExpression) Includes(t time.Time) bool {
 	return wr.Start <= w && w <= wr.End
 }
 
+// Next returns the first available time after t that matches the expression
+// if the resulting value is greater than max, return a zero time
+func (wr WeekdayRangeExpression) Next(t, max time.Time) time.Time {
+	return time.Time{}
+}
+
 // Month is a temporal expression which matches a month
 type Month time.Month
 
@@ -178,6 +212,12 @@ const (
 // matches the temporal expression's
 func (m Month) Includes(t time.Time) bool {
 	return t.Month() == time.Month(m)
+}
+
+// Next returns the first available time after t that matches the expression
+// if the resulting value is greater than max, return a zero time
+func (m Month) Next(t, max time.Time) time.Time {
+	return time.Time{}
 }
 
 // Months is a helper function that combines multiple Month temporal
@@ -203,6 +243,12 @@ type MonthRangeExpression struct {
 	End   time.Month
 }
 
+// Next returns the first available time after t that matches the expression
+// if the resulting value is greater than max, return a zero time
+func (mr MonthRangeExpression) Next(t, max time.Time) time.Time {
+	return time.Time{}
+}
+
 // Includes returns true when the provided time's month falls
 // between the range's Start and Stop values
 func (mr MonthRangeExpression) Includes(t time.Time) bool {
@@ -217,6 +263,12 @@ type Year int
 // matches the temporal expression's
 func (y Year) Includes(t time.Time) bool {
 	return t.Year() == int(y)
+}
+
+// Next returns the first available time after t that matches the expression
+// if the resulting value is greater than max, return a zero time
+func (y Year) Next(t, max time.Time) time.Time {
+	return time.Time{}
 }
 
 // Years is a helper function that combines multipe Year
@@ -249,6 +301,12 @@ func (yr YearRangeExpression) Includes(t time.Time) bool {
 	return int(yr.Start) <= year && year <= int(yr.End)
 }
 
+// Next returns the first available time after t that matches the expression
+// if the resulting value is greater than max, return a zero time
+func (yr YearRangeExpression) Next(t, max time.Time) time.Time {
+	return time.Time{}
+}
+
 // Date is temporal function that matches the year, month, and day
 type Date time.Time
 
@@ -258,6 +316,12 @@ func (d Date) Includes(t time.Time) bool {
 	y0, m0, d0 := t.Date()
 	y1, m1, d1 := time.Time(d).Date()
 	return y0 == y1 && m0 == m1 && d0 == d1
+}
+
+// Next returns the first available time after t that matches the expression
+// if the resulting value is greater than max, return a zero time
+func (d Date) Next(t, max time.Time) time.Time {
+	return time.Time{}
 }
 
 // Dates is a helper function that combines multiple Date temporal
@@ -298,6 +362,12 @@ func (oe OrExpression) Includes(t time.Time) bool {
 	return false
 }
 
+// Next returns the first available time after t that matches the expression
+// if the resulting value is greater than max, return a zero time
+func (oe OrExpression) Next(t, max time.Time) time.Time {
+	return time.Time{}
+}
+
 // And combines multiple temporal expressions into one using
 // a local AND operation
 func And(ee ...TemporalExpression) AndExpression {
@@ -326,6 +396,12 @@ func (ae AndExpression) Includes(t time.Time) bool {
 	return true
 }
 
+// Next returns the first available time after t that matches the expression
+// if the resulting value is greater than max, return a zero time
+func (ae AndExpression) Next(t, max time.Time) time.Time {
+	return time.Time{}
+}
+
 // Not negates a temporal expression
 func Not(e TemporalExpression) NotExpression {
 	return NotExpression{e}
@@ -341,4 +417,10 @@ type NotExpression struct {
 // does not match the provided time
 func (ne NotExpression) Includes(t time.Time) bool {
 	return !ne.e.Includes(t)
+}
+
+// Next returns the first available time after t that matches the expression
+// if the resulting value is greater than max, return a zero time
+func (ne NotExpression) Next(t, max time.Time) time.Time {
+	return time.Time{}
 }

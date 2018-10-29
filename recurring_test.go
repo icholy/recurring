@@ -7,6 +7,27 @@ import (
 	"gotest.tools/assert"
 )
 
+func TestNext(t *testing.T) {
+
+	layout := "2006/01/02"
+
+	tests := []struct {
+		name     string
+		expr     TemporalExpression
+		input    string
+		expected string
+	}{}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			input, err := time.Parse(layout, tt.input)
+			assert.NilError(t, err)
+			actual := tt.expr.Next(input, input.AddDate(1, 0, 0))
+			assert.Equal(t, tt.expected, actual.Format(layout))
+		})
+	}
+}
+
 func TestIncludes(t *testing.T) {
 
 	// yyyy/mm/dd
