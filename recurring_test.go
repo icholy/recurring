@@ -108,6 +108,18 @@ func TestNext(t *testing.T) {
 			input:    "2018/10/30",
 			expected: "2018/11/05",
 		},
+		{
+			name:     "WeekdayRange/Same",
+			expr:     WeekdayRange(time.Tuesday, time.Thursday),
+			input:    "2018/10/30",
+			expected: "2018/10/30",
+		},
+		{
+			name:     "WeekdayRange/After",
+			expr:     WeekdayRange(time.Tuesday, time.Thursday),
+			input:    "2018/10/29",
+			expected: "2018/10/30",
+		},
 	}
 
 	for _, tt := range tests {

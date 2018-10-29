@@ -216,6 +216,12 @@ func (wr WeekdayRangeExpression) Includes(t time.Time) bool {
 // Next returns the first available time after t that matches the expression
 // if the resulting value is greater than max, return a zero time
 func (wr WeekdayRangeExpression) Next(t, max time.Time) time.Time {
+	for t.Before(max) {
+		if wr.Includes(t) {
+			return t
+		}
+		t = Weekday(wr.Start).Next(t, max)
+	}
 	return time.Time{}
 }
 
