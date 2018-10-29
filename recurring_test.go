@@ -85,10 +85,28 @@ func TestNext(t *testing.T) {
 			expected: "2018/11/05",
 		},
 		{
-			name:     "Week/Last",
+			name:     "Week/Negative",
 			expr:     Week(-1),
 			input:    "2018/10/01",
 			expected: "2018/10/29",
+		},
+		{
+			name:     "Weekday/Same",
+			expr:     Monday,
+			input:    "2018/10/29",
+			expected: "2018/10/29",
+		},
+		{
+			name:     "Weekday/After",
+			expr:     Monday,
+			input:    "2018/10/28",
+			expected: "2018/10/29",
+		},
+		{
+			name:     "Weekday/After",
+			expr:     Monday,
+			input:    "2018/10/30",
+			expected: "2018/11/05",
 		},
 	}
 
