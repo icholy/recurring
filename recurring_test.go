@@ -84,6 +84,12 @@ func TestNext(t *testing.T) {
 			input:    "2018/10/25",
 			expected: "2018/11/05",
 		},
+		{
+			name:     "Week/Last",
+			expr:     Week(-1),
+			input:    "2018/10/01",
+			expected: "2018/10/29",
+		},
 	}
 
 	for _, tt := range tests {
