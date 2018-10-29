@@ -9,6 +9,7 @@ import (
 
 func TestNext(t *testing.T) {
 
+	// yyyy/mm/dd
 	layout := "2006/01/02"
 
 	tests := []struct {
@@ -16,7 +17,14 @@ func TestNext(t *testing.T) {
 		expr     TemporalExpression
 		input    string
 		expected string
-	}{}
+	}{
+		{
+			name:     "Day",
+			expr:     Day(2),
+			input:    "2012/12/01",
+			expected: "2012/12/02",
+		},
+	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
