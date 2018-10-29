@@ -48,6 +48,24 @@ func TestNext(t *testing.T) {
 			input:    "2018/09/30",
 			expected: "2018/10/30",
 		},
+		{
+			name:     "DayRange/After",
+			expr:     DayRange(2, 5),
+			input:    "2012/01/01",
+			expected: "2012/01/02",
+		},
+		{
+			name:     "DayRange/Same",
+			expr:     DayRange(2, 5),
+			input:    "2012/01/03",
+			expected: "2012/01/03",
+		},
+		{
+			name:     "DayRange/Before",
+			expr:     DayRange(2, 5),
+			input:    "2012/01/06",
+			expected: "2012/02/02",
+		},
 	}
 
 	for _, tt := range tests {

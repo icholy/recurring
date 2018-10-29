@@ -104,6 +104,12 @@ func (dr DayRangeExpression) Includes(t time.Time) bool {
 // Next returns the first available time after t that matches the expression
 // if the resulting value is greater than max, return a zero time
 func (dr DayRangeExpression) Next(t, max time.Time) time.Time {
+	for t.Before(max) {
+		if dr.Includes(t) {
+			return t
+		}
+		t = dr.Start.Next(t, max)
+	}
 	return time.Time{}
 }
 
