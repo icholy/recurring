@@ -47,6 +47,12 @@ func TestIncludes(t *testing.T) {
 			expr:  DayRange(0, -1),
 			match: []string{"2018/10/31", "2018/11/30", "2018/02/28"},
 		},
+		{
+			name:    "Week",
+			expr:    Week(1),
+			match:   []string{"2018/10/01", "2018/10/03", "2018/10/07"},
+			nomatch: []string{"2018/10/08", "2018/10/20"},
+		},
 	}
 
 	for _, tt := range tests {
