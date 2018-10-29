@@ -104,13 +104,10 @@ func (dr DayRangeExpression) Includes(t time.Time) bool {
 // Next returns the first available time after t that matches the expression
 // if the resulting value is greater than max, return a zero time
 func (dr DayRangeExpression) Next(t, max time.Time) time.Time {
-	for t.Before(max) {
-		if dr.Includes(t) {
-			return t
-		}
-		t = dr.Start.Next(t, max)
+	if dr.Includes(t) {
+		return t
 	}
-	return time.Time{}
+	return dr.Start.Next(t, max)
 }
 
 // Week is a temporal expression that matches a week in a month starting at 1
@@ -216,13 +213,10 @@ func (wr WeekdayRangeExpression) Includes(t time.Time) bool {
 // Next returns the first available time after t that matches the expression
 // if the resulting value is greater than max, return a zero time
 func (wr WeekdayRangeExpression) Next(t, max time.Time) time.Time {
-	for t.Before(max) {
-		if wr.Includes(t) {
-			return t
-		}
-		t = Weekday(wr.Start).Next(t, max)
+	if wr.Includes(t) {
+		return t
 	}
-	return time.Time{}
+	return Weekday(wr.Start).Next(t, max)
 }
 
 // Month is a temporal expression which matches a month
@@ -287,7 +281,10 @@ type MonthRangeExpression struct {
 // Next returns the first available time after t that matches the expression
 // if the resulting value is greater than max, return a zero time
 func (mr MonthRangeExpression) Next(t, max time.Time) time.Time {
-	return time.Time{}
+	if mr.Includes(t) {
+		return t
+	}
+	return Month(mr.Start).Next(t, max)
 }
 
 // Includes returns true when the provided time's month falls
