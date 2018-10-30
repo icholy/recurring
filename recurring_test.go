@@ -211,6 +211,18 @@ func TestNext(t *testing.T) {
 			input: "2012/11/01",
 			zero:  true,
 		},
+		{
+			name:     "Or/Same",
+			expr:     Or(Monday, October),
+			input:    "2018/10/29",
+			expected: "2018/10/29",
+		},
+		{
+			name:     "Or/After",
+			expr:     Or(Monday, October),
+			input:    "2018/11/02",
+			expected: "2018/11/05",
+		},
 	}
 
 	for _, tt := range tests {

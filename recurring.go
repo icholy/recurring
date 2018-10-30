@@ -418,7 +418,13 @@ func (oe OrExpression) Includes(t time.Time) bool {
 // Next returns the first available time after t that matches the expression
 // if the resulting value is greater than max, return a zero time
 func (oe OrExpression) Next(t, max time.Time) time.Time {
-	return time.Time{}
+	var nearest time.Time
+	for _, e := range oe.ee {
+		if next := e.Next(t, max); nearest.IsZero() || next.Before(nearest) {
+			nearest = next
+		}
+	}
+	return nearest
 }
 
 // And combines multiple temporal expressions into one using
