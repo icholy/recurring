@@ -223,6 +223,24 @@ func TestNext(t *testing.T) {
 			input:    "2018/11/02",
 			expected: "2018/11/05",
 		},
+		{
+			name:     "And/Same",
+			expr:     And(Monday, October),
+			input:    "2018/10/29",
+			expected: "2018/10/29",
+		},
+		{
+			name:     "And/After",
+			expr:     And(Monday, October),
+			input:    "2018/10/28",
+			expected: "2018/10/29",
+		},
+		{
+			name:     "And/After",
+			expr:     And(Monday, October),
+			input:    "2018/10/30",
+			expected: "2018/11/05",
+		},
 	}
 
 	for _, tt := range tests {

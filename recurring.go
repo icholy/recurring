@@ -458,7 +458,17 @@ func (ae AndExpression) Includes(t time.Time) bool {
 // Next returns the first available time after t that matches the expression
 // if the resulting value is greater than max, return a zero time
 func (ae AndExpression) Next(t, max time.Time) time.Time {
-	return time.Time{}
+	var furthest time.Time
+	for _, e := range ae.ee {
+		next := e.Next(t, max)
+		if next.IsZero() {
+			return time.Time{}
+		}
+		if furthest.IsZero() || next.After(furthest) {
+			furthest = next
+		}
+	}
+	return furthest
 }
 
 // Not negates a temporal expression
