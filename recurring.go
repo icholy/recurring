@@ -368,6 +368,12 @@ func (d Date) Includes(t time.Time) bool {
 // Next returns the first available time after t that matches the expression
 // if the resulting value is greater than max, return a zero time
 func (d Date) Next(t, max time.Time) time.Time {
+	if d.Includes(t) {
+		return t
+	}
+	if time.Time(d).After(t) {
+		return time.Time(d)
+	}
 	return time.Time{}
 }
 

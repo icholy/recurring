@@ -193,6 +193,24 @@ func TestNext(t *testing.T) {
 			input: "2014/11/10",
 			zero:  true,
 		},
+		{
+			name:     "Date/Same",
+			expr:     Date(time.Date(2012, time.March, 1, 0, 0, 0, 0, time.Local)),
+			input:    "2012/03/01",
+			expected: "2012/03/01",
+		},
+		{
+			name:     "Date/After",
+			expr:     Date(time.Date(2012, time.March, 1, 0, 0, 0, 0, time.Local)),
+			input:    "2012/01/01",
+			expected: "2012/03/01",
+		},
+		{
+			name:  "Date/Before",
+			expr:  Date(time.Date(2012, time.March, 1, 0, 0, 0, 0, time.Local)),
+			input: "2012/11/01",
+			zero:  true,
+		},
 	}
 
 	for _, tt := range tests {
