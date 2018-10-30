@@ -175,6 +175,24 @@ func TestNext(t *testing.T) {
 			input: "2019/01/01",
 			zero:  true,
 		},
+		{
+			name:     "YearRange/Same",
+			expr:     YearRange(2010, 2013),
+			input:    "2012/01/12",
+			expected: "2012/01/12",
+		},
+		{
+			name:     "YearRange/After",
+			expr:     YearRange(2010, 2013),
+			input:    "2009/01/01",
+			expected: "2010/01/01",
+		},
+		{
+			name:  "YearRange/After",
+			expr:  YearRange(2010, 2013),
+			input: "2014/11/10",
+			zero:  true,
+		},
 	}
 
 	for _, tt := range tests {

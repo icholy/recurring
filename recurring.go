@@ -348,7 +348,10 @@ func (yr YearRangeExpression) Includes(t time.Time) bool {
 // Next returns the first available time after t that matches the expression
 // if the resulting value is greater than max, return a zero time
 func (yr YearRangeExpression) Next(t, max time.Time) time.Time {
-	return time.Time{}
+	if yr.Includes(t) {
+		return t
+	}
+	return yr.Start.Next(t, max)
 }
 
 // Date is temporal function that matches the year, month, and day
