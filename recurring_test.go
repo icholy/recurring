@@ -15,6 +15,7 @@ func TestNext(t *testing.T) {
 	tests := []struct {
 		name     string
 		expr     TemporalExpression
+		zero     bool
 		input    string
 		expected string
 	}{
@@ -156,15 +157,37 @@ func TestNext(t *testing.T) {
 			input:    "2018/04/12",
 			expected: "2019/02/01",
 		},
+		{
+			name:     "Year/Same",
+			expr:     Year(2018),
+			input:    "2018/04/12",
+			expected: "2018/04/12",
+		},
+		{
+			name:     "Year/After",
+			expr:     Year(2019),
+			input:    "2018/04/12",
+			expected: "2019/01/01",
+		},
+		{
+			name:  "Year/Before",
+			expr:  Year(2017),
+			input: "2019/01/01",
+			zero:  true,
+		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			input, err := time.Parse(layout, tt.input)
 			assert.NilError(t, err)
-			actual := tt.expr.Next(input, input.AddDate(1, 0, 0))
-			assert.Assert(t, !actual.IsZero())
-			assert.Equal(t, actual.Format(layout), tt.expected)
+			actual := tt.expr.Next(input, input.AddDate(10, 0, 0))
+			if tt.zero {
+				assert.Assert(t, actual.IsZero())
+			} else {
+				assert.Assert(t, !actual.IsZero())
+				assert.Equal(t, actual.Format(layout), tt.expected)
+			}
 		})
 	}
 }

@@ -306,6 +306,12 @@ func (y Year) Includes(t time.Time) bool {
 // Next returns the first available time after t that matches the expression
 // if the resulting value is greater than max, return a zero time
 func (y Year) Next(t, max time.Time) time.Time {
+	if y.Includes(t) {
+		return t
+	}
+	if int(y) > t.Year() {
+		return time.Date(int(y), time.January, 1, 0, 0, 0, 0, time.Local)
+	}
 	return time.Time{}
 }
 
